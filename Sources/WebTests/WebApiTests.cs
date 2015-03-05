@@ -12,7 +12,7 @@ using WebApiTesting.Controllers;
 namespace WebTests
 {
     [TestFixture]
-    public class Class1
+    public class WebApiTests
     {
         [Test]
         public void ShouldUpdateQual()
@@ -28,7 +28,7 @@ namespace WebTests
             {
                 using (var request = new HttpRequestMessage(HttpMethod.Put, "http://localhost/api/values/5"))
                 {
-                    request.Content = new StringContent(@"value:5", Encoding.UTF8, "application/json");
+                    request.Content = new StringContent("{\"value\":5}", Encoding.UTF8, "application/json");
                     using (var response = client.SendAsync(request, CancellationToken.None).Result)
                     {
                         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
@@ -81,7 +81,7 @@ namespace WebTests
         }
 
         [Test]
-        public void GeValues_ReturnsNotFound1()
+        public void Should_Get_Value()
         {
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
