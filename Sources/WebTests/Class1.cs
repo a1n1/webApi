@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Web.Http;
 using NUnit.Framework;
-using WebApplication1;
-using WebApplication1.Controllers;
+using WebApiTesting;
+using WebApiTesting.Controllers;
 
 namespace WebTests
 {
@@ -19,12 +19,11 @@ namespace WebTests
         {
             var httpConfiguration = new HttpConfiguration();
             httpConfiguration.MapHttpAttributeRoutes();
-            httpConfiguration.Routes.MapHttpRoute("Default", "api/{controller}/{id}",
-                new {id = RouteParameter.Optional});
+            httpConfiguration.Routes.MapHttpRoute("Default", "api/{controller}/{id}", new {id = RouteParameter.Optional});
             httpConfiguration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
             //WebApiConfig.Register(httpConfiguration);
             var server = new HttpServer(httpConfiguration);
-
+            var controller = new ValuesController();
             using (var client = new HttpMessageInvoker(server))
             {
                 using (var request = new HttpRequestMessage(HttpMethod.Put, "http://localhost/api/values/5"))
@@ -32,7 +31,7 @@ namespace WebTests
                     request.Content = new StringContent(@"value:5", Encoding.UTF8, "application/json");
                     using (var response = client.SendAsync(request, CancellationToken.None).Result)
                     {
-                        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+                        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
                     }
                 }
             }
@@ -43,8 +42,7 @@ namespace WebTests
         {
             var httpConfiguration = new HttpConfiguration();
             httpConfiguration.MapHttpAttributeRoutes();
-            httpConfiguration.Routes.MapHttpRoute("Default", "api/{controller}/{id}",
-                new {id = RouteParameter.Optional});
+            httpConfiguration.Routes.MapHttpRoute("Default", "api/{controller}/{id}", new {id = RouteParameter.Optional});
 
             httpConfiguration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
             //WebApiConfig.Register(httpConfiguration);
@@ -63,14 +61,6 @@ namespace WebTests
                     }
                 }
             }
-        }
-
-        [Test]
-        public void GetValues_ThrowsNotFound()
-        {
-            var controller = new ValuesController();
-            var responseException = Assert.Throws<HttpResponseException>(() => controller.Get(-1));
-            Assert.That(responseException.Response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
@@ -93,7 +83,6 @@ namespace WebTests
         [Test]
         public void GeValues_ReturnsNotFound1()
         {
-            var controller = new ValuesController();
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
             var server = new HttpServer(config);
