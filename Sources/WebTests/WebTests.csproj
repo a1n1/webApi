@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebApiTesting\WebApiTesting.csproj">
-      <Project>{e59180b2-b7f8-44c7-b92d-df83ed7fbd07}</Project>
-      <Name>WebApiTesting</Name>
+    <ProjectReference Include="..\Web\Web.csproj">
+      <Project>{2ec480b0-88df-47ac-8364-81dd30c81c55}</Project>
+      <Name>Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
